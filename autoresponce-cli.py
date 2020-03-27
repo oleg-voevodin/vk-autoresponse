@@ -43,6 +43,7 @@ except KeyboardInterrupt:
             first_name = vk.method('users.get', {'user_ids':k})[0]['first_name']
             last_name = vk.method('users.get', {'user_ids': k})[0]['last_name']
             print(f'You need answer to {first_name} {last_name}.')
+            write_msg(k, 'Answering machine is turned off!')
     else:
         print('You have no unanswered messages.')
     print('Goodbye :D'); input(); exit()
