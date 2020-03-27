@@ -1,5 +1,6 @@
 import vk_api
 import random
+import time
 
 def write_msg(user_id, msg):
     vk.method('messages.send', {'user_id':user_id, 'message':msg, 'random_id': random.randint(-9999999999999, 9999999999)})
@@ -34,10 +35,14 @@ try:
         for item in response['items']:
             write_msg(item['conversation']['peer']['id'],message)
         vk.method('account.setOnline')
+        time.sleep(3)
 except KeyboardInterrupt:
     print('Stopped.')
-    for k in need_for_answer:
-        first_name = vk.method('users.get', {'user_ids':k})[0]['first_name']
-        last_name = vk.method('users.get', {'user_ids': k})[0]['last_name']
-        print(f'You need answer to {first_name} {last_name}.')
-    print('Goodbye :D'); exit()
+    if len(need_for_answer) != 0:
+        for k in need_for_answer:
+            first_name = vk.method('users.get', {'user_ids':k})[0]['first_name']
+            last_name = vk.method('users.get', {'user_ids': k})[0]['last_name']
+            print(f'You need answer to {first_name} {last_name}.')
+    else:
+        print('You have no unanswered messages.')
+    print('Goodbye :D'); input(); exit()
