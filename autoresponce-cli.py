@@ -1,3 +1,4 @@
+from datetime import datetime
 import vk_api
 import random
 import time
@@ -23,6 +24,8 @@ try:
 
     need_for_answer = []
 
+    status = vk.method('status.get')['text']
+
     while True:
         response = vk.method('messages.getConversations', values)
         if response['items']:
@@ -42,9 +45,11 @@ try:
             elif item['conversation']['peer']['type'] == 'group':
                 vk.method('messages.send', {'peer_id': item['conversation']['peer']['id'], 'message': message, 'random_id': random.randint(-999999999, 999999999)})
         vk.method('account.setOnline')
+        vk.method('status.set', {'text': f'[{datetime.now().strftime("%d-%m-%Y %H:%M:%S")}] Autoresponse by Oleg Voevodin is working on this account.'})
         time.sleep(3)
 except KeyboardInterrupt:
     print('Stopped.')
+    vk.method('status.set', {'text': status})
     if len(need_for_answer) != 0:
         for k in need_for_answer:
             if k['peer_type'] == 'user':
@@ -60,4 +65,4 @@ except KeyboardInterrupt:
 
     else:
         print('You have no unanswered messages.')
-    print('Goodbye :D'); input(); exit()
+    print('Goodbye :D'); input('<Press Enter for exit>\n'); exit()
